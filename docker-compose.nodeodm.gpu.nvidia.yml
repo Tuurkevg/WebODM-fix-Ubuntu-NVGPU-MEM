@@ -5,12 +5,14 @@
 version: '2.1'
 services:
   webapp:
+
     depends_on:
       - node-odm
     environment:
       - WO_DEFAULT_NODES
   node-odm:
     image: opendronemap/nodeodm:gpu
+
     expose:
       - "3000"
     restart: unless-stopped

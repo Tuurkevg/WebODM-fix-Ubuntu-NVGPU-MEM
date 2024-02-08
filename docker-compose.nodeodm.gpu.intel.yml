@@ -5,11 +5,13 @@
 version: '2.1'
 services:
   webapp:
+
     depends_on:
       - node-odm
     environment:
       - WO_DEFAULT_NODES
   node-odm:
+
     environment:
       - RENDER_GROUP_ID
     image: opendronemap/nodeodm:gpu.intel

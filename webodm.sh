@@ -19,7 +19,7 @@ if [[ $platform = "Windows" ]]; then
 fi
 
 dev_mode=false
-gpu=false
+gpu=true
 
 # define realpath replacement function
 if [[ $platform = "MacOS / OSX" ]]; then
@@ -38,13 +38,11 @@ DEFAULT_SSL="$WO_SSL"
 DEFAULT_SSL_INSECURE_PORT_REDIRECT="$WO_SSL_INSECURE_PORT_REDIRECT"
 DEFAULT_BROKER="$WO_BROKER"
 DEFAULT_NODES="$WO_DEFAULT_NODES"
-
 # Parse args for overrides
 POSITIONAL=()
 while [[ $# -gt 0 ]]
 do
 key="$1"
-
 case $key in
     --port)
     export WO_PORT="$2"
@@ -451,6 +449,7 @@ start(){
 
 	if [ ! -z "$WO_WORKER_MEMORY" ]; then
 		command+=" -f docker-compose.worker-memory.yml"
+	
 	fi
 
 	if [ ! -z "$WO_WORKER_CPUS" ]; then

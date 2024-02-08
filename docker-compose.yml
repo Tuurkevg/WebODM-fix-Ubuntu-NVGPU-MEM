@@ -8,18 +8,22 @@ services:
   db:
     image: opendronemap/webodm_db
     container_name: db
+    mem_limit: 28g
     expose:
       - "5432"
     volumes:
-      - ${WO_DB_DIR}:/var/lib/postgresql/data:Z
+      #- ${WO_DB_DIR}:/var/lib/postgresql/data:Z
+      - /media/arthur/D256502356500A9D/Users/Arthur/Documents/VirtualMachines/Webodm-ubuntu-native/postgresql_data:/var/lib/postgresql/data:Z
     restart: unless-stopped
     oom_score_adj: -100
   webapp:
     image: opendronemap/webodm_webapp
     container_name: webapp
+    mem_limit: 28g
     entrypoint: /bin/bash -c "chmod +x /webodm/*.sh && /bin/bash -c \"/webodm/wait-for-postgres.sh db /webodm/wait-for-it.sh -t 0 broker:6379 -- /webodm/start.sh\""
     volumes:
-      - ${WO_MEDIA_DIR}:/webodm/app/media:z
+      #- ${WO_MEDIA_DIR}:/webodm/app/media:z
+      - /media/arthur/D256502356500A9D/Users/Arthur/Documents/VirtualMachines/Webodm-ubuntu-native/webodm_media:/webodm/app/media:z
     ports:
       - "${WO_PORT}:8000"
     depends_on:
@@ -39,14 +43,17 @@ services:
   broker:
     image: redis:7.0.10
     container_name: broker
+    mem_limit: 28g
     restart: unless-stopped
     oom_score_adj: -500
   worker:
     image: opendronemap/webodm_webapp
     container_name: worker
+    mem_limit: 28g
     entrypoint: /bin/bash -c "/webodm/wait-for-postgres.sh db /webodm/wait-for-it.sh -t 0 broker:6379 -- /webodm/wait-for-it.sh -t 0 webapp:8000 -- /webodm/worker.sh start"
     volumes:
-      - ${WO_MEDIA_DIR}:/webodm/app/media:z
+      #- ${WO_MEDIA_DIR}:/webodm/app/media:z
+      - /media/arthur/D256502356500A9D/Users/Arthur/Documents/VirtualMachines/Webodm-ubuntu-native/webodm_media:/webodm/app/media:z      
     depends_on:
       - db
       - broker
